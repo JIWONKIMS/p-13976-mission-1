@@ -29,6 +29,10 @@ class WiseSayingController {
         }
 
         val filteredWiseSayings = if (keywordType.isNotEmpty() && keyword.isNotEmpty()) {
+            println("----------------------")
+            println("검색타입 : $keywordType")
+            println("검색어 : $keyword")
+            println("----------------------")
             wiseSayingService.findByKeyword(keywordType, keyword)
         } else {
             wiseSayingService.findAll()

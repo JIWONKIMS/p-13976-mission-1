@@ -131,4 +131,61 @@ class WiseSayingControllerTest {
             .doesNotContain("1 / 작자미상 / 현재를 사랑하라.")
             .contains("2 / 작자미상 / 과거에 집착하지 마라.")
     }
+
+    @Test
+    @DisplayName("목록(페이징) - page =1")
+    fun t7() {
+        TestRunner.makeSampleData(10)
+
+        val result = TestRunner.run(
+            """
+            목록
+            """
+        )
+
+        assertThat(result)
+            .contains("10 / 작자미상 / 명언 10")
+            .contains("6 / 작자미상 / 명언 6")
+            .doesNotContain("5 / 작자미상 / 명언 5")
+            .doesNotContain("1 / 작자미상 / 명언 1")
+            .contains("페이지 : [1] 2")
+    }
+
+    @Test
+    @DisplayName("목록(페이징) - page =2")
+    fun t8() {
+        TestRunner.makeSampleData(10)
+
+        val result = TestRunner.run(
+            """
+            목록?page=2
+            """
+        )
+
+        assertThat(result)
+            .doesNotContain("10 / 작자미상 / 명언 10")
+            .doesNotContain("6 / 작자미상 / 명언 6")
+            .contains("5 / 작자미상 / 명언 5")
+            .contains("1 / 작자미상 / 명언 1")
+            .contains("페이지 : 1 [2]")
+    }
+
+    @Test
+    @DisplayName("목록(검색 + 페이징)")
+    fun t9() {
+        TestRunner.makeSampleData(10)
+
+        val result = TestRunner.run(
+            """
+            목록?page=1&keywordType=content&keyword=1
+            """.trimIndent()
+        )
+
+        assertThat(result)
+            .contains("10 / 작자미상 / 명언 10")
+            .doesNotContain("9 / 작자미상 / 명언 9")
+            .doesNotContain("2 / 작자미상 / 명언 2")
+            .contains("1 / 작자미상 / 명언 1")
+            .contains("페이지 : [1]")
+    }
 }
